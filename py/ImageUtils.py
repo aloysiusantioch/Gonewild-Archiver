@@ -87,6 +87,9 @@ class ImageUtils(object):
 		elif 'gfycat.com/' in url:
 			# gfycat
 			return ImageUtils.get_urls_gfycat(url)
+		elif 'eroshare.com/' in url:
+			# eroshare
+			return ImageUtils.get_urls_eroshare(url)
 		else:
 			result = []
 			for extension in ['jpg', 'png', 'gif']:
@@ -335,6 +338,30 @@ class ImageUtils(object):
 				urls.append(link)
 				break
 		return ('video', None, urls)
+
+	################
+	# EROSHARE.COM
+	@staticmethod
+	def get_urls_eroshare(url):
+		ImageUtils.debug('eroshare.com: getting %s' % url)
+		headers = {
+			'Referer' : url
+		}
+		r = ImageUtils.httpy.get(url, headers=headers)
+		urls = []
+		for link in ImageUtils.httpy.between(r, 'src="', '"'):
+			if link.startswith('//'): link = 'http:%s' % link
+			if link.endswith(('.jpg', '.png', '.gif', '.mp4')) and '_thumb' not in link:
+				if 'i.eroshare.com' in link or 'v.eroshare.com' in link:
+					if link not in urls:
+						urls.append(link)
+		album_name = None
+		try:
+			album_name = ImageUtils.httpy.between(r, '<meta property="og:url" content="', '"')[0].split('/')[-1]
+		except:
+			pass
+
+		return ('album', album_name, urls)
 
 	################
 	# IMGUR
@@ -615,6 +642,9 @@ if __name__ == '__main__':
 	#url = 'http://gfycat.com/HandmadePertinentArmedcrab'
 	#url = 'https://vidd.me/xpW'
 	#url = 'https://vid.me/xpW'
+	#url = 'https://eroshare.com/ys49ibz5'
+	#url = 'https://eroshare.com/i/lfkqs53i'
+	#url = 'https://eroshare.com/86w6rhr9'
 	url = 'http://imgur.com/PNzNzdf' # Ends with ?1
 	#url = 'http://imgur.com/OZiYY9D' # Does not end with ?1
 	#url = 'http://i.imgur.com/B5TOKc6.gifv'
