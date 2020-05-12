@@ -28,7 +28,7 @@ class Gonewild(object):
 
 		self.reddit   = Reddit()
 		self.excluded_subs = self.db.get_excluded_subreddits()
-		
+
 	def debug(self, text):
 		tstamp = strftime('[%Y-%m-%dT%H:%M:%SZ]', gmtime())
 		text = '%s Gonewild: %s' % (tstamp, text)
@@ -50,7 +50,10 @@ class Gonewild(object):
 		for child in children:
 			if type(child) == Post:
 				if 'gonewild'   in child.subreddit.lower() or \
-				   'gw'         in child.subreddit.lower() or \
+'gonewildcurvy'  in child.subreddit.lower() or \
+'gonewildcolor'  in child.subreddit.lower() or \
+'gonewild18'  in child.subreddit.lower() or \
+                                   'gw'         in child.subreddit.lower() or \
 				   'asstastic'  in child.subreddit.lower() or \
 				   'girlsgone'  in child.subreddit.lower() or \
 				   'gone'       in child.subreddit.lower():
@@ -141,7 +144,7 @@ class Gonewild(object):
 				continue
 
 			self.get_and_process_urls_from_child(child)
-			
+
 		self.debug('%s: poll_user: done' % user)
 
 		# Set last 'since' to the most-recent post/comment ID
@@ -314,7 +317,7 @@ Permalink: %s
 					commid
 			)
 		self.db.update_user(child.author)
-	
+
 	def infinite_loop(self):
 		users = self.db.get_users(new=False)
 
@@ -371,14 +374,14 @@ Permalink: %s
 				except Exception, e:
 					self.debug('infinite_loop: poll_user: %s' % str(e))
 					from traceback import format_exc
-					print format_exc()			
+					print format_exc()
 
 	def add_top_users(self):
 		users = []
-		subs = ['gonewild']
+		subs = ["PetiteGoneWild", "RepressedGoneWild", "MilitaryGoneWild", "gonewild", "gonewildcurvy", "AsiansGoneWild", "GoneWildPlus", "treesgonewild", "workgonewild", "altgonewild", "gifsgonewild", "gonewildcolor", "dykesgonewild", "GoneWildSmiles", "BigBoobsGonewild", "gonewildmetal"]
 		self.debug('add_top_users: loading top posts for the week from %s' % ','.join(subs))
 		try:
-			posts = self.reddit.get('http://www.reddit.com/r/%s/top.json?t=week' % '+'.join(subs))
+			posts = self.reddit.get('http://www.reddit.com/r/%s/hot.json?limit=100' % '+'.join(subs))
 		except Exception, e:
 			self.debug('add_top_users: Exception: %s' % str(e))
 			return users
@@ -462,7 +465,7 @@ Permalink: %s
 					self.debug('Added /u/%s as a friend on reddit' % friend)
 			else:
 				self.debug('Found %d users that are not friended. to friend them, execute:\npython Gonewild.py --friend %s' % (len(need2add), ','.join(need2add)))
-		
+
 	def toggle_addtop(self):
 		if self.db.get_config('add_top_users') != 'false':
 			self.db.set_config('add_top_users', 'false')
@@ -702,7 +705,7 @@ Arguments can continue multiple values (separated by commas)
 		users = args.posts.replace('u/', '').replace('/', '').split(',')
 		for user in users:
 			gw.print_posts(user)
-	
+
 	elif args.log:
 		level = args.log
 		if not level.lower() in ['global', 'user', 'none', 'off']:
@@ -750,4 +753,3 @@ if __name__ == '__main__':
 
 	gw.login()
 	gw.infinite_loop()
-	
