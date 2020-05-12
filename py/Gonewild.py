@@ -378,7 +378,7 @@ Permalink: %s
 
 	def add_top_users(self):
 		users = []
-		subs = ["PetiteGoneWild", "RepressedGoneWild", "MilitaryGoneWild", "gonewild", "gonewildcurvy", "AsiansGoneWild", "GoneWildPlus", "treesgonewild", "workgonewild", "altgonewild", "gifsgonewild", "gonewildcolor", "dykesgonewild", "GoneWildSmiles", "BigBoobsGonewild", "gonewildmetal"]
+		subs = ["PetiteGoneWild", "RepressedGoneWild", "gonewild", "gonewildcurvy", "AsiansGoneWild", "altgonewild", "gonewildcolor", "BigBoobsGonewild", "gonewildmetal", "gonewild18"]
 		self.debug('add_top_users: loading top posts for the week from %s' % ','.join(subs))
 		try:
 			posts = self.reddit.get('http://www.reddit.com/r/%s/hot.json?limit=100' % '+'.join(subs))
